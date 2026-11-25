@@ -38,6 +38,14 @@ def main():
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         f.write(text + "\n")
+    # Read the file back and verify what was written is exactly the gated
+    # line plus one trailing newline; refuse to report success otherwise.
+    with open(path, "r", encoding="utf-8", newline="") as f:
+        written = f.read()
+    if written != text + "\n":
+        print("gate failed: written file does not match the gated line",
+              file=sys.stderr)
+        return 1
     return 0
 
 
